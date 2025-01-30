@@ -7,12 +7,16 @@
  * Description:
  * This Macro quantifies the Vascular Permeability based on 3D image stacks, 
  * from animals where a fluorescent contrast agent was injected. 
- * The user is asked to move a number of round ROIs in the space between micro-vessels
- * the macro then measures the intensity of the fluorescent dye that leaked to 
- * that space ('Intravascular intensity'). A second measurement is performed to measure the 
+ * The user is asked to move a number of round ROIs in the space between micro-vessels.
+ * The macro then measures the intensity of the fluorescent dye that leaked to 
+ * that space ('Intervascular intensity'). A second measurement is performed to measure the 
  * intensity within a larger ring ROI around the first ROI that also contains the vessels ('local intensity')
- * Finally, the 'Relative Vascular Permeability' is calculated as the ratio of Intravascular intensity 
- * to local intensity
+ * Finally, the 'Relative Vascular Permeability' is calculated as the ratio of Intervascular intensity 
+ * to local intensity. This process is repeated for several different ROI locations (currently 5 times) per selected image in the stack.
+ * The macro performs this analysis in different depth layers of the axail image stack (currently in 2 different depth).
+ * Therefore, the user selects a representative image from the first half of the stack to perform the quantification, 
+ * before manually selecting a second image in deeper position to repeat the procedure.
+
  * The Macro was originally developed for data from our custom-built multiphoton
  * endomicroscope, but should also be applicable to similar data from other systems
  * 
@@ -26,7 +30,7 @@
  * The Macro automatically iterates over all images in a given folder and saves
  * the results from all files in a csv file called 'QuantificationResults.csv'
  * this file will include the follwing:
- * 		Intravascular intensity
+ * 		Intervascular intensity
  * 		Local intensity 
  *		Relative Vascular Permeability
  * This file will be saved to the same directory that contains the raw data, as selected by the user
@@ -114,7 +118,7 @@ function processImage() {
 			    intTotal = areaTotal * meanTotal;
 			    sumIntTotal += intTotal;
 			    Roi.remove;
-			    setResult("Intravascular intensity "        + (i + 1), row, intInside);
+			    setResult("Intervascular intensity "        + (i + 1), row, intInside);
 			    setResult("Local intensity "                + (i + 1), row, intTotal);
 			    setResult("Relative Vascular Permeability " + (i + 1), row, intInside / intTotal);
 			}
